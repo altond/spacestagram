@@ -7,11 +7,25 @@
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
+import axios from 'axios'
 
 export default {
   name: 'App',
   components: {
     HelloWorld
+  },
+  methods: {
+    async getImages() {
+      const response = await axios.get("https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY")
+        .catch(err => console.log(err)
+        );
+
+      console.log("yeet")
+      console.log(response)
+    }
+  },
+  mounted() {
+    this.getImages()
   }
 }
 </script>
@@ -23,6 +37,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
