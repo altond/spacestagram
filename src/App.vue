@@ -1,14 +1,15 @@
-<template>
-  <v-app>
+<template class="backdrop">
+  <v-app >
     <v-app-bar
       app
       color="primary"
       dark
+      :src="'https://apod.nasa.gov/apod/image/2107/FlemingsTriangle_Saab_960.jpg'"
     >
     <h1>Spacestagram</h1>
     </v-app-bar>
 
-    <v-main>
+    <v-main >
       <div v-if='this.loadingStatus' class="loading">
         <h1> Fetching Random NASA Astronomy Pictures of the Day </h1>
         <br />
