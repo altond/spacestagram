@@ -5,68 +5,64 @@
       color="primary"
       dark
     >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+    <h1>Spacestagram</h1>
     </v-app-bar>
 
     <v-main>
-      <HelloWorld/>
+      <div v-if='this.loadingStatus' class="loading">
+        <h1> Fetching Random NASA Astronomy Pictures of the Day </h1>
+        <br />
+        <spinner />
+      </div>
+      <NASAImagesView v-bind:data="this.nasaImages"/>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
+import NASAImagesView from './components/NASAImagesView';
+import Spinner from 'vue-simple-spinner'
 import axios from 'axios'
 
 export default {
   name: 'App',
 
   components: {
-    HelloWorld,
+    NASAImagesView,
+    Spinner
   },
 
   methods: {
     async getNASAImages() {
-      const response = await axios.get("https://images-api.nasa.gov/search?media_type=image")
-      console.log(response)
+      this.loadingStatus = true
+
+      await axios.get(this.apiUrl)
+        .then(response => this.nasaImages = response.data.filter(img => img.media_type == "image"))
+        .catch(err => console.log(err)
+        );
+      
+      this.loadingStatus = false
     }
   },
 
-  mounted() {
+  beforeMount() {
     this.getNASAImages()
   },
 
   data: () => ({
-    //
+    apiUrl: "https://api.nasa.gov/planetary/apod?api_key=cV2vrdCjNns2NkRwXh3ytKM7PWs4wlUloU3CftGQ&count=50",
+    nasaImages: null,
+    loadingStatus: false
   }),
 };
 </script>
+
+<style scoped>
+.loading {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+</style>
