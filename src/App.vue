@@ -1,5 +1,5 @@
 <template>
-  <v-app >
+  <v-app>
     <v-app-bar
       app
       color="primary"
@@ -9,7 +9,7 @@
     <h1>Spacestagram</h1>
     </v-app-bar>
 
-    <v-main >
+    <v-main>
       <div v-if='this.loadingStatus' class="loading">
         <h1> Fetching Random NASA Astronomy Pictures of the Day </h1>
         <br />
